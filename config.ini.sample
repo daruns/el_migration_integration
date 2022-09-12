@@ -1,0 +1,10 @@
+[main]
+host = localhost
+database = migrate_s3
+user = root
+password = password
+auth_api_host = https://assets.earthlink.iq/api/auth/token/
+migration_api_host = https://assets.earthlink.iq/api/files/
+migration_auth_user = username
+migration_auth_pass = p@$$W01D
+env = dev
