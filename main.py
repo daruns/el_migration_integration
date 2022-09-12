@@ -77,7 +77,6 @@ def connect():
 
             print(len(myresult))
             xxx = 0
-            myresult = ['f0e1a242-707e-4ab6-997b-22c979e7ad29']
             for x in myresult:
                 xxx += 1
                 print('\n\n########### {0} ###########'.format(x[0]))
