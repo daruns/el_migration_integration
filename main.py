@@ -99,7 +99,7 @@ def connect():
                     post_migrate_file = requests.post(migrate_url_host, headers = migrate_headers)
                     sleep(10)
                     print("### API post_migrate_file status:                 ",post_migrate_file.status_code)
-                    print("### API post_migrate_file body:                   ",post_migrate_file.text and post_migrate_file.text[0:200])
+                    print("### API post_migrate_file body:                   ",post_migrate_file.text.encode('utf-8', 'ignore').decode('utf-8') and post_migrate_file.text.encode('utf-8', 'ignore').decode('utf-8')[0:200])
                     print("### API post_migrate_file history:                ",post_migrate_file.history and post_migrate_file.history[0].url)
                     print("### API post_migrate_file new url:                ",post_migrate_file.url)
                     print("### API post_migrate_file is redirected:          ",post_migrate_file.is_redirect)
@@ -129,7 +129,7 @@ def connect():
                     print("\n\n")
 
                     print("### API get_attached_file status:                 ",get_attached_file.status_code)
-                    print("### API get_attached_file body:                   ",get_attached_file.text and get_attached_file.text[0:200])
+                    print("### API get_attached_file body:                   ",get_attached_file.text.encode('utf-8', 'ignore').decode('utf-8') and get_attached_file.text.encode('utf-8', 'ignore').decode('utf-8')[0:200])
                     print("### API get_attached_file history:                ",get_attached_file.history and get_attached_file.history[0].url)
                     print("### API get_attached_file new url:                ",get_attached_file.url)
                     print("### API get_attached_file prev url:               ",get_attached_file.headers)
@@ -144,7 +144,7 @@ def connect():
                 print("\n\n")
 
                 print("### API checke_existence_attached_file status:        ",checke_existence_attached_file.status_code)
-                print("### API checke_existence_attached_file body:        ",checke_existence_attached_file.text and checke_existence_attached_file.text[0:200])
+                print("### API checke_existence_attached_file body:        ",checke_existence_attached_file.text.encode('utf-8', 'ignore').decode('utf-8') and checke_existence_attached_file.text[0:200].encode('utf-8', 'ignore').decode('utf-8'))
                 print("### API checke_existence_attached_file history:       ",checke_existence_attached_file.history and checke_existence_attached_file.history[0].url)
                 print("### API checke_existence_attached_file new url:       ",checke_existence_attached_file.url)
                 print("### API checke_existence_attached_file is redirected: ",checke_existence_attached_file.is_redirect)
