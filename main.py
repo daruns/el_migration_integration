@@ -144,7 +144,7 @@ def connect():
                 print("\n\n")
 
                 print("### API checke_existence_attached_file status:        ",checke_existence_attached_file.status_code)
-                print("### API checke_existence_attached_file body:        ",checke_existence_attached_file.json()
+                print("### API checke_existence_attached_file body:        ",checke_existence_attached_file.json())
                 print("### API checke_existence_attached_file history:       ",checke_existence_attached_file.history and checke_existence_attached_file.history[0].url)
                 print("### API checke_existence_attached_file new url:       ",checke_existence_attached_file.url)
                 print("### API checke_existence_attached_file is redirected: ",checke_existence_attached_file.is_redirect)
