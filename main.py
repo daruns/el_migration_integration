@@ -94,15 +94,15 @@ def connect():
                 checke_xistence_tktmedia_api_host = main_config['migration_api_host'] + x[0]
                 checke_existence_attached_file = requests.get(checke_xistence_tktmedia_api_host)
                 if checke_existence_attached_file.ok and not checke_existence_attached_file.history:
-                    migrate_url_host = main_config['migration_api_host'] + "{0}/transfer?configurationKey=tickets3attachments".format(x[0])
-                    migrate_headers = {'Authorization': 'Bearer ' + auth_access_token}
-                    post_migrate_file = requests.post(migrate_url_host, headers = migrate_headers)
+                    migrate_url_host = main_config['migration_api_host'] + x[0] + "/transfer?configurationKey=tickets3attachments"
+                    headers = {'Authorization': 'Bearer ' + auth_access_token}
+                    put_migrate_file = requests.put(migrate_url_host, headers=headers)
                     time.sleep(5)
-                    print("### API post_migrate_file status:                 ",post_migrate_file.status_code)
-                    print("### API post_migrate_file body:                   ",post_migrate_file.content)
-                    print("### API post_migrate_file history:                ",post_migrate_file.history and post_migrate_file.history[0].url)
-                    print("### API post_migrate_file new url:                ",post_migrate_file.url)
-                    print("### API post_migrate_file is redirected:          ",post_migrate_file.is_redirect)
+                    print("### API put_migrate_file status:                 ",put_migrate_file.status_code)
+                    print("### API put_migrate_file body:                   ",put_migrate_file.content)
+                    print("### API put_migrate_file history:                ",put_migrate_file.history and put_migrate_file.history[0].url)
+                    print("### API put_migrate_file new url:                ",put_migrate_file.url)
+                    print("### API put_migrate_file is redirected:          ",put_migrate_file.is_redirect)
                     print('### API migrated file! ###')
                     print('### API confirming the file migration ... ###')
                     tktmedia_api_host = main_config['migration_api_host'] + x[0]
