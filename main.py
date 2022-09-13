@@ -3,8 +3,8 @@ from mysql.connector import Error
 import requests
 import json
 from python_main_config import read_main_config
-import logging as log
 import time
+
 class StatusParams:
     not_started = 'not_started'
     pending = 'pending'
