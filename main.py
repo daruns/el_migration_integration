@@ -161,7 +161,7 @@ def connect():
                 # test the first entry only
                 if main_config['env'] == 'dev' and xxx > 2: break
                 print('\n### Final result ###',new_status)
-                print("\n################# END #################")
+                print("\n################################################### END ###################################################")
 
         else:
             print('\n### Authorization from api failed! ###')
