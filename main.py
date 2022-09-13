@@ -172,6 +172,7 @@ def connect():
     finally:
         if conn is not None and conn.is_connected():
             print("\n### finished! and database connection closed ###")
+            print("\n############################# END ###############################")
             conn.close()
 
 if __name__ == '__main__':
