@@ -4,7 +4,7 @@ import requests
 import json
 from python_main_config import read_main_config
 import logging as log
-
+import time
 class StatusParams:
     not_started = 'not_started'
     pending = 'pending'
@@ -97,7 +97,7 @@ def connect():
                     migrate_url_host = main_config['migration_api_host'] + "{0}/transfer?configurationKey=tickets3attachments".format(x[0])
                     migrate_headers = {'Authorization': 'Bearer ' + auth_access_token}
                     post_migrate_file = requests.post(migrate_url_host, headers = migrate_headers)
-                    sleep(10)
+                    time.sleep(5)
                     print("### API post_migrate_file status:                 ",post_migrate_file.status_code)
                     print("### API post_migrate_file body:                   ",post_migrate_file.content)
                     print("### API post_migrate_file history:                ",post_migrate_file.history and post_migrate_file.history[0].url)
@@ -136,6 +136,7 @@ def connect():
                     print("### API get_attached_file is redirected:          ",get_attached_file.is_redirect)
                 elif checke_existence_attached_file.ok and checke_existence_attached_file.history:
                     new_status = StatusParams().done
+                    time.sleep(3)
                 else:
                     new_status = StatusParams().file_not_found
 
