@@ -14,7 +14,7 @@ class StatusParams:
 
 def execute_sql(sql, query_type):
     main_config = read_main_config()
-    print('### Connecting to MySQL database... ###')
+    print('\n### Connecting to MySQL database... ###')
     conn = mysql.connector.connect(
         host= main_config['host'],
         database= main_config['database'],
@@ -25,7 +25,7 @@ def execute_sql(sql, query_type):
     try:
         cursorObject = conn.cursor()
 
-        print("### Connected to db! ###")
+        print("\n### Connected to db! ###")
         cursorObject.execute(sql)
         print(sql)
         output = ""
@@ -37,17 +37,17 @@ def execute_sql(sql, query_type):
             output = "{0} record(s) affected".format(cursorObject.rowcount)
             print(cursorObject.rowcount, "record(s) affected")
     except Exception as err:
-        print("###### DB Error !!!! ######",err)
+        print("\n\n###### DB Error !!!! ######",err)
         err_reason = err
     finally:
-        print("db closed!")
+        print("\ndb closed!")
         conn.close()
 
     if output and not err_reason:
-        print("db sql execute success!!")
+        print("\ndb sql execute success!!")
         return {"success": True, "result": output, "error": ""}
     else:
-        print("db sql execute error", err_reason)
+        print("\ndb sql execute error", err_reason)
         return {"success": False, "result": "", "error": "SQL failed during execution!, Reason: {0}".format( err_reason )}
 
 def connect():
@@ -55,7 +55,7 @@ def connect():
     main_config = read_main_config()
     conn = None
     try:
-        print('### get API auth token ... ###')
+        print('\n### get API auth token ... ###')
         auth_data = {'username': main_config['migration_auth_user'],'password': main_config['migration_auth_pass']}
         auth_url_host = main_config['auth_api_host']
 
@@ -65,7 +65,7 @@ def connect():
             print("\n### auth status_code: {0} ###".format(get_auth.status_code))
             get_auth.json()["access_token"]
             auth_access_token = get_auth.json()["access_token"]
-        print('### end API auth token! ###')
+        print('\n### end API auth token! ###')
         if get_auth.ok:
             ##### SQL selecting query #####
             query ="SELECT aid FROM attachs WHERE status NOT IN ('{}','{}')".format(StatusParams().done, StatusParams().file_not_found)
@@ -83,12 +83,12 @@ def connect():
                 new_status = StatusParams().pending
                 query1 ="UPDATE attachs SET status = '{}' WHERE aid = '{}'".format(new_status, x[0])
                 outputmsql = execute_sql(query1, 'update')
-                print("output of mysql update: ",outputmsql)
+                print("\noutput of mysql update: ",outputmsql)
                 if outputmsql['success']:
                     outputmsql = outputmsql['result']
                     print(outputmsql)
                 else:
-                    print("an error occured during the process: ", outputmsql)
+                    print("\n\nan error occured during the process: ", outputmsql)
                     raise Exception(myresult['error'])
 
                 checke_xistence_tktmedia_api_host = main_config['migration_api_host'] + x[0]
@@ -98,17 +98,17 @@ def connect():
                     headers = {'Authorization': 'Bearer ' + auth_access_token}
                     put_migrate_file = requests.put(migrate_url_host, headers=headers)
                     time.sleep(5)
-                    print("### API put_migrate_file status:                 ",put_migrate_file.status_code)
-                    print("### API put_migrate_file body:                   ",put_migrate_file.content)
-                    print("### API put_migrate_file history:                ",put_migrate_file.history and put_migrate_file.history[0].url)
-                    print("### API put_migrate_file new url:                ",put_migrate_file.url)
-                    print("### API put_migrate_file is redirected:          ",put_migrate_file.is_redirect)
-                    print('### API migrated file! ###')
-                    print('### API confirming the file migration ... ###')
+                    print("\n### API put_migrate_file status:                 ",put_migrate_file.status_code)
+                    print("\n### API put_migrate_file body:                   ",put_migrate_file.content)
+                    print("\n### API put_migrate_file history:                ",put_migrate_file.history and put_migrate_file.history[0].url)
+                    print("\n### API put_migrate_file new url:                ",put_migrate_file.url)
+                    print("\n### API put_migrate_file is redirected:          ",put_migrate_file.is_redirect)
+                    print('\n### API migrated file! ###')
+                    print('\n### API confirming the file migration ... ###')
                     tktmedia_api_host = main_config['migration_api_host'] + x[0]
                     get_attached_file = requests.get(tktmedia_api_host)
                     if get_attached_file.ok and not get_attached_file.history:
-                        print('### API file existence confirmed ... ###')
+                        print('\n\n######### API file existence confirmed ... #########')
                         new_status = StatusParams().migrate_failure
                     elif get_attached_file.ok and get_attached_file.history:
                         new_status = StatusParams().done
@@ -118,62 +118,60 @@ def connect():
 
                     query1 ="UPDATE attachs SET status = '{}' WHERE aid = '{}'".format(new_status, x[0])
                     outputmsql = execute_sql(query1, 'update')
-                    print("output of mysql update: ",outputmsql)
+                    print("\noutput of mysql update: ",outputmsql)
                     if outputmsql['success']:
                         outputmsql = outputmsql['result']
                         print(outputmsql)
                     else:
-                        print("an error occured during the process: ", outputmsql)
-                        raise Exception(myresult['error'])
+                        print("\n\n####### DB:Error occured during the process: ", outputmsql)
+                        raise Exception("\n\n####### DB:Error occured during the process: " + myresult['error'])
 
                     print("\n\n")
 
-                    print("### API get_attached_file status:                 ",get_attached_file.status_code)
-                    # print("### API get_attached_file body:                   ",get_attached_file.json())
-                    print("### API get_attached_file history:                ",get_attached_file.history and get_attached_file.history[0].url)
-                    print("### API get_attached_file new url:                ",get_attached_file.url)
-                    print("### API get_attached_file prev url:               ",get_attached_file.headers)
-                    print("### API get_attached_file is redirected:          ",get_attached_file.is_redirect)
+                    print("\n### API get_attached_file status:                 ",get_attached_file.status_code)
+                    # print("\n### API get_attached_file body:                   ",get_attached_file.json())
+                    print("\n### API get_attached_file history:                ",get_attached_file.history and get_attached_file.history[0].url)
+                    print("\n### API get_attached_file new url:                ",get_attached_file.url)
+                    print("\n### API get_attached_file prev url:               ",get_attached_file.headers)
+                    print("\n### API get_attached_file is redirected:          ",get_attached_file.is_redirect)
                 elif checke_existence_attached_file.ok and checke_existence_attached_file.history:
                     new_status = StatusParams().done
                     time.sleep(3)
                 else:
                     new_status = StatusParams().file_not_found
 
-                print("### progress status: ", new_status)
+                print("\n### progress status: ", new_status)
 
-                print("\n\n")
-
-                print("### API checke_existence_attached_file status:        ",checke_existence_attached_file.status_code)
-                # print("### API checke_existence_attached_file body:        ",checke_existence_attached_file.json())
-                print("### API checke_existence_attached_file history:       ",checke_existence_attached_file.history and checke_existence_attached_file.history[0].url)
-                print("### API checke_existence_attached_file new url:       ",checke_existence_attached_file.url)
-                print("### API checke_existence_attached_file is redirected: ",checke_existence_attached_file.is_redirect)
+                print("\n### API checke_existence_attached_file status:        ",checke_existence_attached_file.status_code)
+                # print("\n### API checke_existence_attached_file body:        ",checke_existence_attached_file.json())
+                print("\n### API checke_existence_attached_file history:       ",checke_existence_attached_file.history and checke_existence_attached_file.history[0].url)
+                print("\n### API checke_existence_attached_file new url:       ",checke_existence_attached_file.url)
+                print("\n### API checke_existence_attached_file is redirected: ",checke_existence_attached_file.is_redirect)
 
                 query1 ="UPDATE attachs SET status = '{}' WHERE aid = '{}'".format(new_status, x[0])
                 outputmsql = execute_sql(query1, 'update')
-                print("output of mysql update: ",outputmsql)
+                print("\noutput of mysql update: ",outputmsql)
                 if outputmsql['success']:
                     outputmsql = outputmsql['result']
                     print(outputmsql)
                 else:
-                    print("an error occured during the process: ", outputmsql)
-                    raise Exception(myresult['error'])
+                    print("\n\n#######DB:Error occured during the process: ", outputmsql)
+                    raise Exception("\n\n####### DB:Error occured during the process: " + myresult['error'])
 
                 # test the first entry only
                 if main_config['env'] == 'dev' and xxx > 2: break
 
-            print('### Connection established! ###')
+            print('\n### Final result ###',new_status)
 
         else:
-            print('### Connection failed! ###')
+            print('\n### Authorization from api failed! ###')
 
     except Exception as err:
-        print("error occured,",err)
+        print("GENERAL:Error occured,",err)
 
     finally:
         if conn is not None and conn.is_connected():
-            print("### finished! and database connection closed ###")
+            print("\n### finished! and database connection closed ###")
             conn.close()
 
 if __name__ == '__main__':
