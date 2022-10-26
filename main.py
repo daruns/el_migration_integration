@@ -4,6 +4,7 @@ import requests
 import json
 from python_main_config import read_main_config
 import time
+import os
 
 class StatusParams:
     not_started = 'not_started'
@@ -68,7 +69,7 @@ def connect():
         print('\n### end API auth token! ###')
         if get_auth.ok:
             ##### SQL selecting query #####
-            query ="SELECT aid FROM attachs WHERE status NOT IN ('{}','{}')".format(StatusParams().done, StatusParams().file_not_found)
+            query ="SELECT aid FROM attachs WHERE status NOT IN ('{}','{}') ORDER BY status DESC".format(StatusParams().done, StatusParams().file_not_found)
             myresult = execute_sql(query, 'get')
             if myresult['success']:
                 myresult = myresult['result']
@@ -97,7 +98,7 @@ def connect():
                     migrate_url_host = main_config['migration_api_host'] + x[0] + "/transfer?configurationKey=tickets3attachments"
                     headers = {'Authorization': 'Bearer ' + auth_access_token}
                     put_migrate_file = requests.put(migrate_url_host, headers=headers)
-                    time.sleep(5)
+                    time.sleep(2)
                     print("\n### API put_migrate_file status:                 ",put_migrate_file.status_code)
                     print("\n### API put_migrate_file body:                   ",put_migrate_file.content)
                     print("\n### API put_migrate_file history:                ",put_migrate_file.history and put_migrate_file.history[0].url)
@@ -136,7 +137,7 @@ def connect():
                     print("\n### API get_attached_file is redirected:          ",get_attached_file.is_redirect)
                 elif checke_existence_attached_file.ok and checke_existence_attached_file.history:
                     new_status = StatusParams().done
-                    time.sleep(3)
+                    time.sleep(2)
                 else:
                     new_status = StatusParams().file_not_found
 
@@ -162,7 +163,7 @@ def connect():
                 if main_config['env'] == 'dev' and xxx > 2: break
                 print('\n### Final result ###',new_status)
                 print("\n################################################### END ###################################################")
-
+                cmd_result = os.system("date +%s > last_run_time.txt")
         else:
             print('\n### Authorization from api failed! ###')
 
